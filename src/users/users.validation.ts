@@ -8,4 +8,4 @@
  *
  *******************************************************************************/
 
-export const allowedOrigins = ['http://localhost:8000'];
+import { Joi } from 'express-validation';

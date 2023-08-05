@@ -1,7 +1,17 @@
+/*******************************************************************************
+ *
+ * Copyright (c) {2022-2023} Francois J. Aouad.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU General Public License v3.0
+ * which accompanies this distribution, and is available at
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *******************************************************************************/
+
 import { Types } from 'mongoose';
-import { CategoryModel } from './category.schema';
-import { categorySchema } from './category.validation';
-import { UserModel } from '../users/user.schema';
+import { CategoryModel } from './categories.schema';
+import { categorySchema } from './categories.validation';
+import { UserModel } from '../users/users.schema';
 import { NoteModel } from '../notes/notes.schema';
 import { GlobalService } from '../global/global.service';
 

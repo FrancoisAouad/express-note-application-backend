@@ -1,6 +1,16 @@
+/*******************************************************************************
+ *
+ * Copyright (c) {2022-2023} Francois J. Aouad.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU General Public License v3.0
+ * which accompanies this distribution, and is available at
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *******************************************************************************/
+
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import { UserModel } from './user.schema';
+import { UserModel } from './users.schema';
 import { EmailService } from '../utils/email.service';
 // import client from '../lib/db/redis.service';
 import { GlobalService } from '../global/global.service';

@@ -7,5 +7,3 @@
  * https://www.gnu.org/licenses/gpl-3.0.en.html
  *
  *******************************************************************************/
-
-export const allowedOrigins = ['http://localhost:8000'];

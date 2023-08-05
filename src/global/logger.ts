@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *
+ * Copyright (c) {2022-2023} Francois J. Aouad.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU General Public License v3.0
+ * which accompanies this distribution, and is available at
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *******************************************************************************/
+
 import { createLogger, transports, LoggerOptions, format } from 'winston';
 import config from '../configs/config';
 
@@ -37,17 +47,17 @@ export class Logger {
     this.logger.debug(message, { label: labels, ...meta });
   };
 
-  private static createTransport(labels?: any) {
+  static createTransport(labels?: any) {
     const customTransports = [];
 
-    // if (config().application_logging.file) {
-    //   customTransports.push(
-    //     new transports.File({ filename: config().application_logging.file, level: config().application_logging.level, ...labels }),
-    //   );
+    const applicationLogging = config().application_logging || false;
+
+    // if (applicationLogging?.file) {
+    //   customTransports.push(new transports.File({ filename: applicationLogging.file, level: applicationLogging.level, ...labels }));
     // }
 
-    // if (config().application_logging.console) {
-    // customTransports.push(new transports.Console({ level: true, ...labels }));
+    // if (applicationLogging?.console) {
+    //   customTransports.push(new transports.Console({ level: applicationLogging.console, ...labels }));
     // }
 
     return customTransports;

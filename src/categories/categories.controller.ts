@@ -1,6 +1,16 @@
+/*******************************************************************************
+ *
+ * Copyright (c) {2022-2023} Francois J. Aouad.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU General Public License v3.0
+ * which accompanies this distribution, and is available at
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *******************************************************************************/
+
 import express from 'express';
 // import { verifyAccessToken } from '../lib/jwt/jwtVerify.js';
-import { CategoryService } from './category.service';
+import { CategoryService } from './categories.service';
 // import { isEmailVerified } from '../middleware/isUserVerified.js';
 // import { isCategoryPermitted } from '../middleware/isPermitted.js';
 import { RootQuerySelector } from 'mongoose';

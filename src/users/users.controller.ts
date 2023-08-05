@@ -1,6 +1,16 @@
+/*******************************************************************************
+ *
+ * Copyright (c) {2022-2023} Francois J. Aouad.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU General Public License v3.0
+ * which accompanies this distribution, and is available at
+ * https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *******************************************************************************/
+
 import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'express-validation';
-import { UserService } from './user.service';
+import { UserService } from './users.service';
 import { NoteService } from '../notes/notes.service';
 import { Controller } from '../global/global.types';
 
