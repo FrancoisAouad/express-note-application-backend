@@ -11,6 +11,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { CategoryService } from './categories.service';
 import { Controller } from '../global/global.types';
+import { Guard } from '../global/global.guard';
 
 /**
  * CategoryController handles category-related API endpoints and their logic.
@@ -18,9 +19,10 @@ import { Controller } from '../global/global.types';
  * @extends Controller
  */
 export class CategoryController extends Controller {
-  private categoryService: CategoryService;
   public path: string;
   public router: Router;
+  private categoryService: CategoryService;
+  private readonly guard: Guard;
 
   /**
    * Creates an instance of CategoryController.
@@ -28,11 +30,12 @@ export class CategoryController extends Controller {
    */
   public constructor() {
     super();
-    this.path = '/category';
+    this.path = '/categories';
     this.categoryService = new CategoryService();
+    this.guard = new Guard();
+    this.initBindings();
     this.router = Router();
     this.initRoutes();
-    this.initBindings();
   }
 
   /**
@@ -44,9 +47,9 @@ export class CategoryController extends Controller {
    * @param {NextFunction} next - Express next middleware function.
    * @returns {Promise<void>}
    */
-  async deleteOne(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async deleteOne(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await this.categoryService.deleteCategory(req.params, req.headers.authorization);
+      await this.categoryService.deleteOne(req.params, req.headers.authorization);
       res.status(200).json({ success: true });
     } catch (e) {
       next(e);
@@ -62,9 +65,9 @@ export class CategoryController extends Controller {
    * @param {NextFunction} next - Express next middleware function.
    * @returns {Promise<void>}
    */
-  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await this.categoryService.addCategory(req.headers.authorization, req.body);
+      const result = await this.categoryService.create(req.headers.authorization, req.body);
       res.status(201).json({ success: true, data: result });
     } catch (e) {
       next(e);
@@ -80,9 +83,9 @@ export class CategoryController extends Controller {
    * @param {NextFunction} next - Express next middleware function.
    * @returns {Promise<void>}
    */
-  async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async getAll(req: Request | any, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await this.categoryService.getCategories(req.headers.authorization);
+      const result = await this.categoryService.getAll(req.user);
       res.status(200).json({ success: true, data: result });
     } catch (e) {
       next(e);
@@ -98,9 +101,9 @@ export class CategoryController extends Controller {
    * @param {NextFunction} next - Express next middleware function.
    * @returns {Promise<void>}
    */
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await this.categoryService.editCategory(req.params, req.body);
+      await this.categoryService.update(req.params, req.body);
       res.status(200).json({ success: true });
     } catch (e) {
       next(e);
@@ -111,9 +114,9 @@ export class CategoryController extends Controller {
    * Initializes the Express routes for category-related endpoints.
    * @function initRoutes
    */
-  initRoutes() {
-    this.router.post(`${this.path}`, this.create);
-    this.router.get(`${this.path}`, this.getAll);
+  public initRoutes(): void {
+    this.router.post(`${this.path}`, (req, res, next) => this.guard.authenticate(req, res, next), this.create);
+    this.router.get(`${this.path}`, (req, res, next) => this.guard.authenticate(req, res, next), this.getAll);
     this.router.put(`${this.path}/:id`, this.update);
     this.router.delete(`${this.path}/:id`, this.deleteOne);
   }
@@ -122,7 +125,7 @@ export class CategoryController extends Controller {
    * Initializes the method bindings to ensure the correct context.
    * @function initBindings
    */
-  initBindings(): void {
+  public initBindings(): void {
     this.create = this.create.bind(this);
     this.getAll = this.getAll.bind(this);
     this.update = this.update.bind(this);

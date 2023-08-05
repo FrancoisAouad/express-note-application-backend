@@ -21,7 +21,7 @@ export class CategoryService {
     this.globalService = new GlobalService();
   }
 
-  async deleteCategory(params: any, header: any) {
+  public async deleteOne(params: any, header: any) {
     //get logged in user
     const id = this.globalService.getUser(header);
     //check if category exists
@@ -56,7 +56,8 @@ export class CategoryService {
       });
     }
   }
-  async addCategory(header, body) {
+
+  public async create(header, body) {
     const id = this.globalService.getUser(header);
     //validate input
     const { categoryName } = await categorySchema.validateAsync(body);
@@ -76,14 +77,22 @@ export class CategoryService {
     //save in collection
     return await categ.save();
   }
-  async getCategories(header) {
+
+  public async getAll(header: any) {
     const id = this.globalService.getUser(header);
     return await CategoryModel.find({ creatorID: id }).sort({
       updatedDate: -1,
     });
   }
 
-  async editCategory(params: any, body: any) {
+  public async getById(header) {
+    const id = this.globalService.getUser(header);
+    return await CategoryModel.find({ creatorID: id }).sort({
+      updatedDate: -1,
+    });
+  }
+
+  public async update(params: any, body: any) {
     //validate updated user input
     const newCategory = await categorySchema.validateAsync(body);
     return await CategoryModel.updateOne({ _id: new Types.ObjectId(params.categoryId) }, { categoryName: body.categoryName });

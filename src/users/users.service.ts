@@ -15,6 +15,7 @@ import { EmailService } from '../utils/email.service';
 // import client from '../lib/db/redis.service';
 import { GlobalService } from '../global/global.service';
 import { JwtService } from '../lib/jwt/jwt.service.js';
+import { Types } from 'mongoose';
 
 export class UserService {
   private readonly globalService: GlobalService;
@@ -167,4 +168,9 @@ export class UserService {
 
     return await user.save();
   };
+
+  public async getUser(_id: Types.ObjectId) {
+    const res = await UserModel.aggregate([{ $match: { _id: new Types.ObjectId(_id) } }]);
+    return res?.length ?? res[0];
+  }
 }

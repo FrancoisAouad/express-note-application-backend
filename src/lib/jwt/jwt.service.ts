@@ -8,12 +8,11 @@
  *
  *******************************************************************************/
 
-import jwt from 'jsonwebtoken';
+import { verify, sign } from 'jsonwebtoken';
 import createError from 'http-errors';
 // import client from '../db/redis.service.js';
 
 export class JwtService {
-  //ACCESS TOKEN
   setAccessToken = (userId) => {
     //access token body
     const payload = {};
@@ -24,7 +23,7 @@ export class JwtService {
       audience: userId,
     };
     //we sign and create the token and return its value
-    const token = jwt.sign(payload, 'secret', options);
+    const token = sign(payload, 'secret', options);
     return token;
   };
 
@@ -35,11 +34,11 @@ export class JwtService {
       const secret = process.env.SECRET_REFRESH_TOKEN;
       const options = {
         expiresIn: '1y',
-        issuer: 'eurisko-test.com',
+        issuer: 'express-note.com',
         audience: userId,
       };
       //we save and create the token
-      const token = jwt.sign(payload, 'secret', options);
+      const token = sign(payload, 'secret', options);
       //we save the refrsh token inside of redis
       // await client.SET(userId, token, 'EX', 365 * 24 * 60 * 60);
       //we return its value
@@ -57,11 +56,11 @@ export class JwtService {
       const secret = process.env.SECRET_RESETPASSWORD_TOKEN;
       const options = {
         expiresIn: '10m',
-        issuer: 'eurisko-test.com',
+        issuer: 'express-note.com',
         audience: userId,
       };
       //we sign the token
-      const token = jwt.sign(payload, 'secret', options);
+      const token = sign(payload, 'secret', options);
       //we return its value
       return token;
     } catch (error) {
@@ -77,7 +76,7 @@ export class JwtService {
     const bearerToken = authHeader.split(' ');
     const token = bearerToken[1];
     //we verify if the token is valid
-    jwt.verify(token, 'process.env.SECRET_ACCESS_TOKEN', (err, payload) => {
+    verify(token, 'process.env.SECRET_ACCESS_TOKEN', (err, payload) => {
       if (err) {
         const message = err.name === 'JsonWebTokenError' ? 'Unauthorized' : err.message;
         return next(new createError.Unauthorized(message));
@@ -124,7 +123,7 @@ export class JwtService {
   verifyResetPasswordToken = async (refreshToken) => {
     try {
       //verify jwt token
-      const payload: any = jwt.verify(refreshToken, 'process.env.SECRET_RESETPASSWORD_TOKEN');
+      const payload: any = verify(refreshToken, 'process.env.SECRET_RESETPASSWORD_TOKEN');
       //get user id from payload
       const userId = payload.aud;
       if (!userId) {
@@ -138,4 +137,11 @@ export class JwtService {
       throw createError.Unauthorized();
     }
   };
+
+  public async decodeToken(jwtToken: string, options?: object) {
+    const token = jwtToken.split(' ')[1];
+    const decoded: any = verify(token, 'process.env.SECRET_ACCESS_TOKEN');
+    const id = decoded.aud;
+    return id;
+  }
 }

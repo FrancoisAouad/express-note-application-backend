@@ -21,21 +21,41 @@ export interface CategoryDocument extends Document {
    * @required
    * @example "Electronics"
    */
-  categoryName: string;
+  name: string;
+
+  /**
+   * The description of the category.
+   * @type {string}
+   * @required
+   * @example "Electronics"
+   */
+  description?: {
+    en: string;
+    ar: string;
+    fr: string;
+  };
+
+  /**
+   * The status of the category.
+   * @type {boolean}
+   * @required
+   * @example Published
+   */
+  status: boolean;
 
   /**
    * The timestamp when the category was created.
    * @type {Date}
    * @default Date.now()
    */
-  createdDate?: Date;
+  createdAt?: Date;
 
   /**
    * The timestamp when the category was last updated.
    * @type {Date}
    * @default Date.now()
    */
-  updatedDate?: Date;
+  updatedAt?: Date;
 
   /**
    * The ID of the user who created the category.
@@ -43,21 +63,15 @@ export interface CategoryDocument extends Document {
    * @reference 'user'
    * @example ObjectId("617f2e42b55b7708ff48f4a6")
    */
-  creatorID?: Schema.Types.ObjectId;
+  createdBy: Schema.Types.ObjectId;
 
   /**
-   * The name of the user who created the category.
-   * @type {string}
-   * @example "John Doe"
+   * The ID of the user who updated the category.
+   * @type {Schema.Types.ObjectId}
+   * @reference 'user'
+   * @example ObjectId("617f2e42b55b7708ff48f4a6")
    */
-  creatorName?: string;
-
-  /**
-   * The email of the user who created the category.
-   * @type {string}
-   * @example "john@example.com"
-   */
-  creatorEmail?: string;
+  updatedBy?: Schema.Types.ObjectId;
 }
 
 /**
@@ -65,42 +79,40 @@ export interface CategoryDocument extends Document {
  * @class CategorySchema
  */
 export const CategorySchema = new Schema<CategoryDocument>({
-  categoryName: {
+  name: {
     type: String,
     required: true,
     trim: true,
     maxlength: 255,
   },
-  createdDate: {
+  description: {
+    type: Object,
+  },
+  status: {
+    type: Boolean,
+  },
+  createdAt: {
     type: Date,
     default: Date.now,
   },
-  updatedDate: {
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
-  creatorID: {
+  createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'user', // Assuming there is a 'user' collection for user details
+    ref: 'user',
   },
-  creatorName: {
-    type: String,
-    trim: true,
-    maxlength: 100,
-  },
-  creatorEmail: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    maxlength: 255,
+  updatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
   },
 });
 
 /* Indexes */
-CategorySchema.index({ creatorID: -1, creatorName: -1 });
-CategorySchema.index({ creatorID: -1 });
-CategorySchema.index({ categoryName: -1 });
-CategorySchema.index({ updatedDate: -1 });
+CategorySchema.index({ createdBy: -1 });
+CategorySchema.index({ name: -1 });
+CategorySchema.index({ updatedAt: -1 });
 
 /**
  * The Category Mongoose Model.
