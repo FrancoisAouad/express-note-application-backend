@@ -32,34 +32,34 @@ export class ApplicationModule {
     this.initExceptionFilter();
   }
 
-  listen() {
+  listen = () => {
     this.app.listen(config().app.port, () => {
       this.logger.info(`Server running on port ${config().app.port}`, { system: 'app' });
     });
-  }
+  };
 
-  initMiddlewares() {
+  initMiddlewares = () => {
     this.app.use(cors(corsConfig));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-  }
+  };
 
-  initControllers(controllers: Controller[]) {
+  initControllers = (controllers: Controller[]) => {
     controllers.forEach((controller: Controller) => {
       this.app.use('/api', controller.router);
     });
-  }
+  };
 
-  initExceptionFilter() {
+  initExceptionFilter = () => {
     this.app.use(this.httpExceptionFilter.exceptionMiddleware);
     this.app.use(this.httpExceptionFilter.catch);
-  }
+  };
 
-  initSwaggerDocs() {
+  initSwaggerDocs = () => {
     return;
-  }
+  };
 
-  initPrometheus() {
+  initPrometheus = () => {
     return;
-  }
+  };
 }

@@ -8,10 +8,9 @@
  *
  *******************************************************************************/
 
-import express, { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, Router } from 'express';
 import { validate } from 'express-validation';
 import { UserService } from './users.service';
-import { NoteService } from '../notes/notes.service';
 import { Controller } from '../global/global.types';
 
 export class UserController extends Controller {
@@ -23,7 +22,7 @@ export class UserController extends Controller {
     super();
     this.path = '/auth';
     this.userService = new UserService();
-    this.router = express.Router();
+    this.router = Router();
     this.initRoutes();
   }
 

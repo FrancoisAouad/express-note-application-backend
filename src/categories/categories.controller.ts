@@ -8,15 +8,9 @@
  *
  *******************************************************************************/
 
-import express from 'express';
-// import { verifyAccessToken } from '../lib/jwt/jwtVerify.js';
+import { Router, Request, Response, NextFunction } from 'express';
 import { CategoryService } from './categories.service';
-// import { isEmailVerified } from '../middleware/isUserVerified.js';
-// import { isCategoryPermitted } from '../middleware/isPermitted.js';
-import { RootQuerySelector } from 'mongoose';
 import { Controller } from '../global/global.types';
-
-// const CategoryService = new categoryService();
 
 export class CategoryController extends Controller {
   private categoryService: CategoryService;
@@ -27,11 +21,11 @@ export class CategoryController extends Controller {
     super();
     this.path = '/category';
     this.categoryService = new CategoryService();
-    this.router = express.Router();
+    this.router = Router();
     this.initRoutes();
   }
 
-  async deleteCategory(req, res, next) {
+  deleteOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this.categoryService.deleteCategory(req.params, req.headers.authorization);
       res.status(200).json({
@@ -40,20 +34,21 @@ export class CategoryController extends Controller {
     } catch (e) {
       next(e);
     }
-  }
-  async addCategory(req, res, next) {
+  };
+
+  create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await this.categoryService.addCategory(req.headers.authorization, req.body);
       res.status(201).json({
         success: true,
-        messsage: 'Added Category!',
         data: result,
       });
     } catch (e) {
       next(e);
     }
-  }
-  async getCategories(req, res, next) {
+  };
+
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await this.categoryService.getCategories(req.headers.authorization);
       res.status(200).json({
@@ -63,18 +58,18 @@ export class CategoryController extends Controller {
     } catch (e) {
       next(e);
     }
-  }
-  async editCategory(req, res, next) {
+  };
+
+  update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this.categoryService.editCategory(req.params, req.body);
       res.status(200).json({
         success: true,
-        messsage: 'Edited Category!',
       });
     } catch (e) {
       next(e);
     }
-  }
+  };
 
   initRoutes() {
     // this.router.post(`${this.path}`, verifyAccessToken, isEmailVerified, this.addCategory);

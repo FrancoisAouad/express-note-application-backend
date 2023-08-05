@@ -8,7 +8,7 @@
  *
  *******************************************************************************/
 
-import express from 'express';
+import { Router } from 'express';
 // import { isNotePermitted } from '../middleware/isPermitted.js';
 // import { verifyAccessToken } from '../lib/jwt/jwtVerify.js';
 // import { isEmailVerified } from '../middleware/isUserVerified.js';
@@ -25,7 +25,7 @@ export class NoteController extends Controller {
     super();
     this.path = '/notes';
     this.noteService = new NoteService();
-    this.router = express.Router();
+    this.router = Router();
     this.initRoutes();
   }
 

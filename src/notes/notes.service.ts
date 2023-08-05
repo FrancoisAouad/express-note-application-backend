@@ -23,7 +23,7 @@ export class NoteService {
     this.globalService = new GlobalService();
   }
 
-  async createNote(body: any, files: any, header: any) {
+  createNote = async (body: any, files: any, header: any) => {
     // const authHeader = req.headers['authorization'];
     const id = this.globalService.getUser(header);
     //check is note exists with creator id and noteid
@@ -60,9 +60,9 @@ export class NoteService {
       return newNote;
     }
     return newNote;
-  }
+  };
 
-  async getNoteById(params: any, header: any) {
+  getNoteById = async (params: any, header: any) => {
     const id = this.globalService.getUser(header);
     const note = await NoteModel.find({
       creatorID: id,
@@ -70,15 +70,15 @@ export class NoteService {
     });
     if (!note) throw new Error('notfound');
     return note;
-  }
+  };
 
-  async deleteNote(params: any) {
+  deleteNote = async (params: any) => {
     const note = await NoteModel.deleteOne(params.noteId);
     if (!note) throw new Error('notfound...');
     return note;
-  }
+  };
 
-  async getNotes(header: any, body: any, query: any) {
+  getNotes = async (header: any, body: any, query: any) => {
     // const authHeader = req.headers['authorization'];
     const id = this.globalService.getUser(header);
     // let sort = query.Sort;
@@ -218,9 +218,9 @@ export class NoteService {
       Note: notes,
       Page: page,
     };
-  }
+  };
 
-  async editNote(header: any, body: any, params: any) {
+  editNote = async (header: any, body: any, params: any) => {
     // const authHeader = req.headers['authorization'];
     const id = this.globalService.getUser(header);
     // const noteId = req.params.noteId;
@@ -248,5 +248,5 @@ export class NoteService {
         },
       },
     );
-  }
+  };
 }

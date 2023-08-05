@@ -27,7 +27,7 @@ export class UserService {
     this.emailService = new EmailService();
   }
 
-  async register(body: any, header: any) {
+  register = async (body: any, header: any) => {
     //validate user input
     const result = { email: '', name: '' };
     //genarate encrypted email token to be used for account activation
@@ -59,8 +59,9 @@ export class UserService {
     });
     //send jwt tokens to client
     return { a: 'accessToken', b: 'refreshToken' };
-  }
-  async login(body) {
+  };
+
+  login = async (body) => {
     //validate input
     const result = { password: '', email: '' };
     //check if email exists
@@ -77,8 +78,9 @@ export class UserService {
     // console.log(refreshToken);
 
     return { accessToken: '', refreshToken: '' };
-  }
-  async refreshToken(body) {
+  };
+
+  refreshToken = async (body) => {
     if (!body) throw new Error('BadRequest');
 
     // const userId = await verifyRefreshToken(body);
@@ -88,8 +90,9 @@ export class UserService {
     // const refToken = await setRefreshToken(userId);
 
     return { accessToken: 'accessToken', refreshToken: 'refToken' };
-  }
-  async logout(body) {
+  };
+
+  logout = async (body) => {
     //check refresh token
     const { refreshToken } = body;
     //return error if not found
@@ -102,8 +105,9 @@ export class UserService {
     //   if (error) throw new Error('InternalServerError');
     // });
     // return true;
-  }
-  async forgotPassword(header) {
+  };
+
+  forgotPassword = async (header) => {
     //get logged in user
     // const authHeader = req.headers['authorization'];
     const id = this.globalService.getUser(header);
@@ -129,8 +133,9 @@ export class UserService {
 
     //send message that email was sent
     return user;
-  }
-  async resetPassword(params, body, header) {
+  };
+
+  resetPassword = async (params, body, header) => {
     const { token } = params;
     //validate new pass
     const result = { password: '' };
@@ -148,8 +153,9 @@ export class UserService {
     user.password = hashedPassword;
     //update password in database
     return await user.save();
-  }
-  async verifyEmail(query) {
+  };
+
+  verifyEmail = async (query) => {
     //check mongodb for token for this specific user
     const token = query.token;
     const user = await UserModel.findOne({ emailToken: token });
@@ -160,5 +166,5 @@ export class UserService {
     user.isVerified = true;
 
     return await user.save();
-  }
+  };
 }

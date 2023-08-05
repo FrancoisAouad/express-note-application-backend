@@ -17,6 +17,7 @@ export class HttpExceptionFilter {
   public constructor() {
     this.logger = Logger.getLogger();
   }
+
   exceptionMiddleware = (req: Request, res: Response, next: NextFunction) => {
     next(
       new HttpException({
@@ -26,6 +27,7 @@ export class HttpExceptionFilter {
       }),
     );
   };
+
   catch = (err: HttpException | Error, req: Request, res: Response, next: NextFunction) => {
     let status = 500;
     let message: string | string[] = 'Unknown error';
