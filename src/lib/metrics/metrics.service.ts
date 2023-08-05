@@ -17,10 +17,10 @@ export class MetricService {
     this.generateMetrics();
   }
 
-  generateMetrics = async () => {
+  async generateMetrics() {
     const result = await register.metrics();
     return result;
-  };
+  }
 
   static registerCustomMetrics = () => {
     register.registerMetric(databaseResponseTimeHistogram);

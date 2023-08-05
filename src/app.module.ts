@@ -58,8 +58,4 @@ export class ApplicationModule {
   initSwaggerDocs = () => {
     return;
   };
-
-  initPrometheus = () => {
-    return;
-  };
 }

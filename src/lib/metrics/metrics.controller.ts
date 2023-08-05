@@ -8,25 +8,31 @@
  *
  *******************************************************************************/
 
-import { Router } from 'express';
+import { NextFunction, Router, Response } from 'express';
 import { Controller } from '../../global/global.types';
 import { MetricService } from './metrics.service';
 
 export class MetricController extends Controller {
   private readonly metricService: MetricService;
+
   public constructor() {
     super();
     this.path = '/metrics';
-    this.metricService = new MetricService();
     this.router = Router();
+    this.metricService = new MetricService();
     this.initRoutes();
   }
 
-  generateMetrics() {
-    return this.metricService.generateMetrics();
+  async generateMetrics(req: any, res: Response, next: NextFunction) {
+    try {
+      const result = await this.metricService.generateMetrics();
+      res.status(200).send(result);
+    } catch (e: any) {
+      next(e);
+    }
   }
 
   initRoutes() {
-    this.router.get(`${this.path}`, this.generateMetrics);
+    this.router.get(`${this.path}`, this.generateMetrics.bind(this));
   }
 }
