@@ -10,18 +10,23 @@
 
 import express, { Application } from 'express';
 import config from '../../configs/config';
+import { Logger } from '../../global/logger';
 
 export class MetricModule {
   public app: Application;
-  constructor(controllers: any) {
+  private readonly logger: Logger;
+  public constructor(controllers: any) {
     this.app = express();
+    this.logger = Logger.getLogger();
     this.initializeControllers(controllers);
   }
+
   startPrometheusServer = () => {
     this.app.listen(config().prometheus.port, () => {
-      console.log(`Prometheus metrics server running on port ${config().prometheus.port}`);
+      this.logger.info(`Prometheus metrics server running on port ${config().prometheus.port}`, { system: 'metrics' });
     });
   };
+
   initializeControllers(controllers: any) {
     controllers.forEach((controller: any) => {
       this.app.use(controller.router);

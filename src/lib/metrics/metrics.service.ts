@@ -12,15 +12,15 @@ import { collectDefaultMetrics, register } from 'prom-client';
 import { databaseResponseTimeHistogram, getRestResponseTimeHistogram } from './metrics.config';
 
 export class MetricService {
-  constructor() {
+  public constructor() {
     collectDefaultMetrics();
     this.generateMetrics();
   }
 
-  async generateMetrics() {
+  generateMetrics = async () => {
     const result = await register.metrics();
     return result;
-  }
+  };
 
   static registerCustomMetrics = () => {
     register.registerMetric(databaseResponseTimeHistogram);

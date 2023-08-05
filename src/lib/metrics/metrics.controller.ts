@@ -20,6 +20,7 @@ export class MetricController extends Controller {
     this.path = '/metrics';
     this.router = Router();
     this.metricService = new MetricService();
+    this.initBindings();
     this.initRoutes();
   }
 
@@ -33,6 +34,10 @@ export class MetricController extends Controller {
   }
 
   initRoutes() {
-    this.router.get(`${this.path}`, this.generateMetrics.bind(this));
+    this.router.get(`${this.path}`, this.generateMetrics);
   }
+
+  initBindings = () => {
+    this.generateMetrics = this.generateMetrics.bind(this);
+  };
 }
