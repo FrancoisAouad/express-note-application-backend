@@ -93,11 +93,15 @@ export class NoteController extends Controller {
     }
   }
 
-  initRoutes() {
+  initRoutes(): void {
     // this.router.post(`/${this.path}`, verifyAccessToken, isEmailVerified, this.createNote);
     // this.router.get(`/${this.path}/:noteId`, verifyAccessToken, isEmailVerified, this.getNoteById);
     // this.router.get(`/${this.path}`, verifyAccessToken, isEmailVerified, this.getNotes);
     // this.router.patch(`/${this.path}/:noteId`, verifyAccessToken, isEmailVerified, isNotePermitted, this.editNote);
     // this.router.delete(`/${this.path}/:noteId`, verifyAccessToken, isEmailVerified, isNotePermitted, this.deleteNote);
+  }
+
+  initBindings(): void {
+    return;
   }
 }

@@ -10,12 +10,20 @@
 
 import { Histogram } from 'prom-client';
 
+/**
+ * Histogram metric to track REST API response time.
+ * @property {Histogram} getRestResponseTimeHistogram
+ */
 export const getRestResponseTimeHistogram = new Histogram({
   name: 'rest_response_time_duration_seconds',
   help: 'REST API response time in seconds',
   labelNames: ['method', 'route', 'status_code'],
 });
 
+/**
+ * Histogram metric to track database response time.
+ * @property {Histogram} databaseResponseTimeHistogram
+ */
 export const databaseResponseTimeHistogram = new Histogram({
   name: 'db_response_time_duration_seconds',
   help: 'Database response time in seconds',

@@ -11,7 +11,7 @@
 import { NoteModel } from '../notes/notes.schema';
 import path from 'path';
 import createError from 'http-errors';
-import tagModel from '../tags/tags.model';
+import { TagModel } from '../tags/tags.schema';
 import jwt from 'jsonwebtoken';
 
 export class GlobalService {
@@ -24,7 +24,7 @@ export class GlobalService {
       //assign tag string body to name variable
       const name = tags[i];
       //check if tag exists
-      const exists = await tagModel.findOne({ tagName: name });
+      const exists = await TagModel.findOne({ tagName: name });
 
       if (exists) {
         //push tagID to the notes tag array if it already exists
@@ -36,10 +36,10 @@ export class GlobalService {
           { $push: { tags: exists._id } },
         );
         //push userID to creatorsID field inside tag
-        await tagModel.updateOne({ _id: exists._id }, { $addToSet: { creatorsID: UserInfo._id } });
+        await TagModel.updateOne({ _id: exists._id }, { $addToSet: { creatorsID: UserInfo._id } });
       } else if (!exists) {
         //create new tag for the tag
-        const newTags = new tagModel({
+        const newTags = new TagModel({
           tagName: name,
         });
         //save tag
@@ -53,7 +53,7 @@ export class GlobalService {
           { $push: { tags: savedtag._id } },
         );
         //add the userid to the names of the users that used this tag
-        await tagModel.updateOne({ _id: savedtag._id }, { $addToSet: { creatorsID: UserInfo._id } });
+        await TagModel.updateOne({ _id: savedtag._id }, { $addToSet: { creatorsID: UserInfo._id } });
       }
     }
   }

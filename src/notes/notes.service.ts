@@ -13,7 +13,7 @@ import path from 'path';
 import { NoteModel } from './notes.schema';
 import { UserModel } from '../users/users.schema';
 import { CategoryModel } from '../categories/categories.schema';
-import tagModel from '../tags/tags.model.js';
+import { TagModel } from '../tags/tags.schema.js';
 import { noteSchema } from './notes.validation';
 import { GlobalService } from '../global/global.service';
 
@@ -111,7 +111,7 @@ export class NoteService {
       const tagsArray = [];
       for (let i = 0; i < tags.length; i++) {
         const name = tags[i];
-        const tagexists = await tagModel.findOne({
+        const tagexists = await TagModel.findOne({
           tagName: name,
           creatorsID: { $in: id },
         });

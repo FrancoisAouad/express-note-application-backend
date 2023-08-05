@@ -12,13 +12,29 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpException } from './global.exception';
 import { Logger } from './logger';
 
+/**
+ * HttpExceptionFilter is a custom filter to handle HTTP exceptions and errors.
+ * @class HttpExceptionFilter
+ */
 export class HttpExceptionFilter {
   private logger: Logger;
+
+  /**
+   * Creates an instance of HttpExceptionFilter.
+   * @constructor
+   */
   public constructor() {
     this.logger = Logger.getLogger();
   }
 
-  exceptionMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  /**
+   * The exceptionMiddleware is a middleware function to handle HTTP exceptions.
+   * @function exceptionMiddleware
+   * @param {Request} req - Express request object.
+   * @param {Response} res - Express response object.
+   * @param {NextFunction} next - Express next middleware function.
+   */
+  exceptionMiddleware = (req: Request, res: Response, next: NextFunction): void => {
     next(
       new HttpException({
         errorCode: 'NOT_FOUND',
@@ -28,7 +44,15 @@ export class HttpExceptionFilter {
     );
   };
 
-  catch = (err: HttpException | Error, req: Request, res: Response, next: NextFunction) => {
+  /**
+   * The catch function handles HTTP exceptions and errors.
+   * @function catch
+   * @param {HttpException | Error} err - The thrown HttpException or Error instance.
+   * @param {Request} req - Express request object.
+   * @param {Response} res - Express response object.
+   * @param {NextFunction} next - Express next middleware function.
+   */
+  catch = (err: HttpException | Error, req: Request, res: Response, next: NextFunction): void => {
     let status = 500;
     let message: string | string[] = 'Unknown error';
 
