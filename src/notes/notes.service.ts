@@ -25,19 +25,19 @@ export class NoteService {
 
   createNote = async (body: any, files: any, header: any) => {
     // const authHeader = req.headers['authorization'];
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     //check is note exists with creator id and noteid
-    const UserInfo = await UserModel.findOne({ _id: id });
+    const UserInfo = await UserModel.findOne({ _id: 'id' });
     const __dirname = path.resolve();
     //validate input
     const { title, content, tags, category } = await noteSchema.validateAsync(body);
     const cat = await CategoryModel.findOne({
       categoryName: category,
-      creatorID: id,
+      creatorID: 'id',
     });
     if (!cat) throw new Error('notfound..');
     const newNote = await NoteModel.create({
-      creatorID: id,
+      creatorID: 'id',
       title: title,
       content: content,
       categoryID: cat._id,
@@ -63,9 +63,9 @@ export class NoteService {
   };
 
   getNoteById = async (params: any, header: any) => {
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     const note = await NoteModel.find({
-      creatorID: id,
+      creatorID: 'id',
       _id: params.noteId,
     });
     if (!note) throw new Error('notfound');
@@ -80,7 +80,7 @@ export class NoteService {
 
   getNotes = async (header: any, body: any, query: any) => {
     // const authHeader = req.headers['authorization'];
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     // let sort = query.Sort;
     //get objectId of UserModel
     // const loguser = await UserModel.findOne({ _id: id });
@@ -92,7 +92,7 @@ export class NoteService {
     const limit = query.limit || 10;
     const page = query.page || 1;
     //defaulr param object if no filtering and searching input sent
-    const params = [{ $match: { creatorID: new Types.ObjectId(id) } }];
+    const params = [{ $match: { creatorID: new Types.ObjectId('id') } }];
     //general aggregation stages for all cases
     const skipObj = {
       $skip: (page - 1) * limit,
@@ -113,7 +113,7 @@ export class NoteService {
         const name = tags[i];
         const tagexists = await TagModel.findOne({
           tagName: name,
-          creatorsID: { $in: id },
+          creatorsID: { $in: 'id' },
         });
 
         if (tagexists) {
@@ -161,7 +161,7 @@ export class NoteService {
       // const category = query.category;
       //find this specific document
       const categ = await CategoryModel.findOne({
-        creatorID: id,
+        creatorID: 'id',
         _id: query.category,
       });
 
@@ -205,7 +205,7 @@ export class NoteService {
       //   params.push(ObjCategory, categoryObjLookupTags, categoryLookup, skipObj, limitObj, sortObj, projectCategories);
     }
     //get total number of notes
-    const totalNotes = await NoteModel.find({ creatorID: id }).count();
+    const totalNotes = await NoteModel.find({ creatorID: 'id' }).count();
     //aggregation
     const notes = await NoteModel.aggregate(params);
     //data response
@@ -222,11 +222,11 @@ export class NoteService {
 
   editNote = async (header: any, body: any, params: any) => {
     // const authHeader = req.headers['authorization'];
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     // const noteId = req.params.noteId;
     //check is note exists with creator id and noteid
     const exists = await NoteModel.find({
-      creatorID: id,
+      creatorID: 'id',
       _id: params.noteId,
     });
     if (!exists) throw new Error('notfound');

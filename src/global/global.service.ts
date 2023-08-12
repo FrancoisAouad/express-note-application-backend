@@ -12,7 +12,6 @@ import { NoteModel } from '../notes/notes.schema';
 import path from 'path';
 import createError from 'http-errors';
 import { TagModel } from '../tags/tags.schema';
-import jwt from 'jsonwebtoken';
 
 export class GlobalService {
   async addTags(tags, newNote, UserInfo) {
@@ -57,16 +56,7 @@ export class GlobalService {
       }
     }
   }
-  getUser(authHeader) {
-    //split auth header to get bearer token
-    const token = authHeader.split(' ')[1];
-    //verify the token and decoded it using
-    const decoded: any = jwt.verify(token, 'process.env.SECRET_ACCESS_TOKEN');
-    //get the id field from the decoded token
-    const id = decoded.aud;
-    //return the id value
-    return id;
-  }
+
   async uploadImage(image, __dirname, newNote) {
     // checkImage(image);
     const imageExtension = path.extname(image.name);

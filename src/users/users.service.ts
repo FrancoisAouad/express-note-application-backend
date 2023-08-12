@@ -111,9 +111,9 @@ export class UserService {
   forgotPassword = async (header) => {
     //get logged in user
     // const authHeader = req.headers['authorization'];
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     //check if user exists
-    const user = await UserModel.findOne({ _id: id });
+    const user = await UserModel.findOne({ _id: 'id' });
     //return error if user not found
     if (!user) throw new Error('unauthorized');
 
@@ -142,9 +142,9 @@ export class UserService {
     const result = { password: '' };
     //get user id
     // const authHeader = req.headers['authorization'];
-    const id = this.globalService.getUser(header);
+    // const id = this.globalService.getUser(header);
     //check if user found
-    const user = await UserModel.findOne({ _id: id });
+    const user = await UserModel.findOne({ _id: 'id' });
     if (!user) throw new Error('user not found..');
     //verify that the password token is valid
     // await verifyResetPasswordToken(token);

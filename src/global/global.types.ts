@@ -102,3 +102,6 @@ export abstract class Controller {
    */
   abstract initBindings(): void;
 }
+
+export type AxiosHttpOptions = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+export type AxiosHeaderOptions = { header: string; value: string };

@@ -117,8 +117,8 @@ export class CategoryController extends Controller {
   public initRoutes(): void {
     this.router.post(`${this.path}`, (req, res, next) => this.guard.authenticate(req, res, next), this.create);
     this.router.get(`${this.path}`, (req, res, next) => this.guard.authenticate(req, res, next), this.getAll);
-    this.router.put(`${this.path}/:id`, this.update);
-    this.router.delete(`${this.path}/:id`, this.deleteOne);
+    this.router.put(`${this.path}/:id`, (req, res, next) => this.guard.authenticate(req, res, next), this.update);
+    this.router.delete(`${this.path}/:id`, (req, res, next) => this.guard.authenticate(req, res, next), this.deleteOne);
   }
 
   /**
