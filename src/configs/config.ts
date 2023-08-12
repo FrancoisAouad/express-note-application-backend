@@ -17,7 +17,7 @@ export default () => {
     DB_PORT = 27017,
     DB_USER = '',
     DB_PASSWORD = '',
-    DB_DATABASE = 'note-app',
+    DB_NAME = 'note-app',
     LOG_LEVEL = 'info',
     LOG_ENABLE_CONSOLE = true,
     LOG_FILE = false,
@@ -39,7 +39,7 @@ export default () => {
       port: DB_PORT,
       user: DB_USER,
       password: DB_PASSWORD,
-      database: DB_DATABASE,
+      database: DB_NAME,
     },
     application_logging: {
       level: LOG_LEVEL,

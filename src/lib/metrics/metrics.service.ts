@@ -44,17 +44,17 @@ export class MetricService {
    * @async
    * @returns {Promise<string>} A Promise that resolves with the generated metrics as a string.
    */
-  generateMetrics = async () => {
+  public async generateMetrics() {
     const result = await register.metrics();
     return result;
-  };
+  }
 
   /**
    * Registers custom metrics (histograms) for database response time and REST API response time.
    * @static
    * @function registerCustomMetrics
    */
-  static registerCustomMetrics = () => {
+  private static registerCustomMetrics() {
     /**
      * Registers a custom histogram metric for database response time.
      * @property {Histogram} databaseResponseTimeHistogram
@@ -66,5 +66,5 @@ export class MetricService {
      * @property {Histogram} getRestResponseTimeHistogram
      */
     register.registerMetric(getRestResponseTimeHistogram);
-  };
+  }
 }

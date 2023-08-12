@@ -1,18 +1,18 @@
-import mongoose from 'mongoose';
+import { connect, disconnect, connection, Connection } from 'mongoose';
 import { Logger } from '../../global/logger';
 import config from '../../configs/config';
 
 interface ConnectionResult {
   event: string;
   status: string;
-  connection?: mongoose.Connection;
+  connection?: Connection;
   error?: any;
 }
 
 export class MongoService {
-  private logger: Logger;
+  private readonly logger: Logger;
 
-  constructor() {
+  public constructor() {
     this.logger = Logger.getLogger();
   }
 
@@ -23,7 +23,7 @@ export class MongoService {
     return `mongodb://${host}:${port}/${name}`;
   }
 
-  private static establishConnection(): mongoose.Connection {
+  private static establishConnection() {
     try {
       const database = this.dataConnection(
         config().mongo.user,
@@ -33,8 +33,11 @@ export class MongoService {
         config().mongo.database,
       );
 
-      mongoose.connect(database);
-      const connection = mongoose.connection;
+      connect(database);
+
+      connection.on('connected', () => {
+        console.log('Database Connection was Successful');
+      });
 
       connection.on('error', (err) => {
         throw {
@@ -46,22 +49,13 @@ export class MongoService {
 
       return connection;
     } catch (error: any) {
-      throw {
-        event: 'error',
-        status: 'MongoDB Connection Error',
-        error: error,
-      };
+      throw error;
     }
   }
 
-  public static async connectToTheDatabase(): Promise<ConnectionResult> {
+  public static connectToTheDatabase() {
     try {
-      const connection = this.establishConnection();
-      return {
-        event: 'connected',
-        status: 'Database Connection was Successful',
-        connection: connection,
-      };
+      this.establishConnection();
     } catch (error: any) {
       return {
         event: 'error',
@@ -72,8 +66,8 @@ export class MongoService {
   }
 
   public static async closeConnection(): Promise<void> {
-    if (mongoose.connection) {
-      await mongoose.disconnect();
+    if (connection) {
+      await disconnect();
     }
   }
 }

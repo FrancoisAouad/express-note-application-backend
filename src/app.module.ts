@@ -16,6 +16,7 @@ import corsConfig from './configs/cors.config';
 import { HttpExceptionFilter } from '../src/global/exception-filter';
 import { Logger } from './global/logger';
 import { Controller } from './global/global.types.js';
+import { MongoService } from './lib/db/mongo.service';
 dotenv.config();
 
 /**
@@ -58,6 +59,8 @@ export class ApplicationModule {
      * @property {Application} app
      */
     this.app = express();
+
+    MongoService.connectToTheDatabase();
 
     /**
      * The Logger instance for logging application-related messages.

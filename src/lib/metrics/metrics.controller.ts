@@ -73,7 +73,7 @@ export class MetricController extends Controller {
    * @param {NextFunction} next - The NextFunction to handle the next middleware.
    * @returns {Promise<void>} A Promise that resolves when metrics are generated and sent in the response.
    */
-  async generateMetrics(req: any, res: Response, next: NextFunction) {
+  private async generateMetrics(req: any, res: Response, next: NextFunction) {
     try {
       const result = await this.metricService.generateMetrics();
       res.status(200).send(result);
@@ -87,7 +87,7 @@ export class MetricController extends Controller {
    * The 'generateMetrics' route handles GET requests to retrieve metrics.
    * @function initRoutes
    */
-  initRoutes() {
+  public initRoutes() {
     this.router.get(`${this.path}`, this.generateMetrics);
   }
 
@@ -96,7 +96,7 @@ export class MetricController extends Controller {
    * This method binds the 'generateMetrics' method to the correct context (this).
    * @function initBindings
    */
-  initBindings = () => {
+  public initBindings = () => {
     this.generateMetrics = this.generateMetrics.bind(this);
   };
 }

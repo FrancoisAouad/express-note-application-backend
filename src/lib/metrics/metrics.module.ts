@@ -62,7 +62,7 @@ export class MetricModule {
    * Starts the Prometheus metrics server and listens on the specified port.
    * @function startPrometheusServer
    */
-  startPrometheusServer = () => {
+  public startPrometheusServer = () => {
     this.app.listen(config().prometheus.port, () => {
       this.logger.info(`Prometheus metrics server running on port ${config().prometheus.port}`, { system: 'metrics' });
     });
@@ -73,7 +73,7 @@ export class MetricModule {
    * @function initializeControllers
    * @param {any} controllers - An array of controllers to be initialized by the metric module.
    */
-  initializeControllers(controllers: any) {
+  private initializeControllers(controllers: any) {
     controllers.forEach((controller: any) => {
       this.app.use(controller.router);
     });

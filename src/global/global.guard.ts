@@ -109,7 +109,7 @@ export class Guard {
       next(e);
     }
   };
-
+  // method to check if user is only allowed to edit their own resources
   private permissionGuard = async (req: any, res: any, next: any) => {
     try {
       const authHeader = req.headers['authorization'];

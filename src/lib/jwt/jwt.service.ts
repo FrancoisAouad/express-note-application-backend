@@ -10,16 +10,18 @@
 
 import { verify, sign } from 'jsonwebtoken';
 import createError from 'http-errors';
+import { HttpException } from '../../global/global.exception';
 // import client from '../db/redis.service.js';
 
 export class JwtService {
+  // public constructor() {}
   setAccessToken = (userId) => {
     //access token body
     const payload = {};
     const secret = process.env.SECRET_ACCESS_TOKEN;
     const options = {
       expiresIn: '15m',
-      issuer: 'eurisko-test.com',
+      issuer: 'express-note.com',
       audience: userId,
     };
     //we sign and create the token and return its value
