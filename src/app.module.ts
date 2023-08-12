@@ -97,7 +97,7 @@ export class ApplicationModule {
    * Starts the server and listens on the specified port.
    * @function listen
    */
-  listen = () => {
+  public listen = () => {
     this.app.listen(config().app.port, () => {
       this.logger.info(`Server running on port ${config().app.port}`, { system: 'app' });
     });
@@ -107,7 +107,7 @@ export class ApplicationModule {
    * Initializes application middlewares, including CORS, JSON parsing, and URL-encoded parsing.
    * @function initMiddlewares
    */
-  initMiddlewares = () => {
+  private initMiddlewares = () => {
     this.app.use(cors(corsConfig));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -118,7 +118,7 @@ export class ApplicationModule {
    * @function initControllers
    * @param {Controller[]} controllers - An array of controller instances to be registered in the application.
    */
-  initControllers = (controllers: Controller[]) => {
+  public initControllers = (controllers: Controller[]) => {
     controllers.forEach((controller: Controller) => {
       this.app.use('/api', controller.router);
     });
@@ -128,7 +128,7 @@ export class ApplicationModule {
    * Initializes the HTTP exception filter for handling exceptions in the application.
    * @function initExceptionFilter
    */
-  initExceptionFilter = () => {
+  private initExceptionFilter = () => {
     this.app.use(this.httpExceptionFilter.exceptionMiddleware);
     this.app.use(this.httpExceptionFilter.catch);
   };
@@ -137,7 +137,7 @@ export class ApplicationModule {
    * Initializes Swagger documentation for the application (to be implemented).
    * @function initSwaggerDocs
    */
-  initSwaggerDocs = () => {
+  public initSwaggerDocs = () => {
     // To be implemented
     return;
   };

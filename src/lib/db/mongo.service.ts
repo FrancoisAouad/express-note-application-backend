@@ -1,55 +1,77 @@
-/*******************************************************************************
- *
- * Copyright (c) {2022-2023} Francois J. Aouad.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU General Public License v3.0
- * which accompanies this distribution, and is available at
- * https://www.gnu.org/licenses/gpl-3.0.en.html
- *
- *******************************************************************************/
-
 import mongoose from 'mongoose';
 import { Logger } from '../../global/logger';
 import config from '../../configs/config';
 
+interface ConnectionResult {
+  event: string;
+  status: string;
+  connection?: mongoose.Connection;
+  error?: any;
+}
+
 export class MongoService {
-  public logger: Logger;
-  public constructor() {
+  private logger: Logger;
+
+  constructor() {
     this.logger = Logger.getLogger();
   }
 
-  static connectToTheDatabase() {
+  private static dataConnection(user?: string, pass?: string, host?: string, port?: number, name?: string) {
+    if (user && pass) {
+      return `mongodb://${user}:${pass}@${host}:${port}/${name}?authSource=admin`;
+    }
+    return `mongodb://${host}:${port}/${name}`;
+  }
+
+  private static establishConnection(): mongoose.Connection {
     try {
-      const database = MongoService.dataConnection(
+      const database = this.dataConnection(
         config().mongo.user,
         config().mongo.password,
         config().mongo.host,
         Number(config().mongo.port),
         config().mongo.database,
       );
+
       mongoose.connect(database);
-      const { connection } = mongoose;
-      // connection.on('connected', () => this.logger.info('Database Connection was Successful'));
+      const connection = mongoose.connection;
+
       connection.on('error', (err) => {
-        // logger.error(`MongoDB Connection Failed on Port: ${config().mongo.port}, IP: ${config().mongo.host}`, { err: err });
-        throw new Error(err);
+        throw {
+          event: 'error',
+          status: 'MongoDB Connection Error',
+          error: err,
+        };
       });
-      // connection.on('disconnected', () => this.logger.info('Database Connection Disconnected'));
+
       return connection;
     } catch (error: any) {
-      // this.logger.error(`Error caught in MongoDB connect to DB`, { err: error });
-      throw error;
+      throw {
+        event: 'error',
+        status: 'MongoDB Connection Error',
+        error: error,
+      };
     }
   }
 
-  static dataConnection(user?: string, pass?: string, host?: string, port?: number, name?: string) {
-    if (user && pass) {
-      return `mongodb://${`${user}:${pass}@`}${host}:${port}/${name}?authSource=admin`;
+  public static async connectToTheDatabase(): Promise<ConnectionResult> {
+    try {
+      const connection = this.establishConnection();
+      return {
+        event: 'connected',
+        status: 'Database Connection was Successful',
+        connection: connection,
+      };
+    } catch (error: any) {
+      return {
+        event: 'error',
+        status: 'MongoDB Connection Failed',
+        error: error,
+      };
     }
-    return `mongodb://${host}:${port}/${name}`;
   }
 
-  static async closeConnection() {
+  public static async closeConnection(): Promise<void> {
     if (mongoose.connection) {
       await mongoose.disconnect();
     }
