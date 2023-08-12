@@ -42,7 +42,7 @@ export class Logger {
    * @function getLogger
    * @returns {Logger} The instance of the Logger class.
    */
-  static getLogger(): Logger {
+  public static getLogger(): Logger {
     if (!Logger.instance) {
       Logger.instance = new Logger();
     }
@@ -56,9 +56,9 @@ export class Logger {
    * @param {object} labels - Key-value pairs of labels for the log entry.
    * @param {any} meta - Optional metadata to be included in the log entry.
    */
-  info = (message: string, labels: { [key: string]: string }, meta?: any): void => {
+  public info(message: string, labels: { [key: string]: string }, meta?: any): void {
     this.logger.info(message, { label: labels, ...meta });
-  };
+  }
 
   /**
    * Logs an error level message with the provided message, labels, and optional metadata.
@@ -67,9 +67,9 @@ export class Logger {
    * @param {object} labels - Key-value pairs of labels for the log entry.
    * @param {any} meta - Optional metadata to be included in the log entry.
    */
-  error = (message: string, labels: { [key: string]: string }, meta?: any): void => {
+  public error(message: string, labels: { [key: string]: string }, meta?: any): void {
     this.logger.error(message, { label: labels, ...meta });
-  };
+  }
 
   /**
    * Logs a warning level message with the provided message, labels, and optional metadata.
@@ -78,9 +78,9 @@ export class Logger {
    * @param {object} labels - Key-value pairs of labels for the log entry.
    * @param {any} meta - Optional metadata to be included in the log entry.
    */
-  warn = (message: string, labels: { [key: string]: string }, meta?: any): void => {
+  public warn(message: string, labels: { [key: string]: string }, meta?: any): void {
     this.logger.warn(message, { label: labels, ...meta });
-  };
+  }
 
   /**
    * Logs a debug level message with the provided message, labels, and optional metadata.
@@ -89,9 +89,9 @@ export class Logger {
    * @param {object} labels - Key-value pairs of labels for the log entry.
    * @param {any} meta - Optional metadata to be included in the log entry.
    */
-  debug = (message: string, labels: { [key: string]: string }, meta?: any): void => {
+  public debug(message: string, labels: { [key: string]: string }, meta?: any): void {
     this.logger.debug(message, { label: labels, ...meta });
-  };
+  }
 
   /**
    * Creates custom transports for logging based on the application configuration.
@@ -100,7 +100,7 @@ export class Logger {
    * @param {any} labels - Optional labels to be included in the custom transports.
    * @returns {transports.Transport[]} An array of custom transports for logging.
    */
-  static createTransport(labels?: any) {
+  private static createTransport(labels?: any) {
     const customTransports = [];
 
     const applicationLogging = config().application_logging || false;
